@@ -30,10 +30,12 @@ const startStimulus = () => {
 };
 
 describe('SwupController', () => {
-    let container;
+    afterEach(() => {
+        clearDOM();
+    });
 
-    beforeEach(() => {
-        container = mountDOM(`
+    it('connect', async () => {
+        let container = mountDOM(`
             <html>
                 <head>
                     <title>Symfony UX</title>
@@ -56,16 +58,135 @@ describe('SwupController', () => {
                 </body>
             </html>
         `);
-    });
-
-    afterEach(() => {
-        clearDOM();
-    });
-
-    it('connect', async () => {
         expect(getByTestId(container, 'body')).not.toHaveClass('connected');
 
         startStimulus();
         await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+    });
+
+    it('neither main element nor containers provided', async () => {
+        let container = mountDOM(`
+            <html>
+                <head>
+                    <title>Symfony UX</title>
+                </head>
+                <body>
+                    <div 
+                        data-testid="body"
+                        data-controller="check swup"
+                        data-link-selector="a"
+                        data-animation-selector="[transition-*]"
+                        data-debug="data-debug"
+                        data-cache="data-cache"
+                        data-animate-history-browsing="data-animate-history-browsing">
+                        <div id="nav"></div>
+                        <div id="swup">
+                            <a href="/">Link</a>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `);
+        expect(getByTestId(container, 'body')).not.toHaveClass('connected');
+
+        startStimulus();
+        await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+        await waitFor(() => expect(swup.options.containers).toStrictEqual(["#swup"]));
+    });
+
+    it('only data-main-element is provided,', async () => {
+        let container = mountDOM(`
+            <html>
+                <head>
+                    <title>Symfony UX</title>
+                </head>
+                <body>
+                    <div 
+                        data-testid="body"
+                        data-controller="check swup"
+                        data-main-element="#main"
+                        data-link-selector="a"
+                        data-animation-selector="[transition-*]"
+                        data-debug="data-debug"
+                        data-cache="data-cache"
+                        data-animate-history-browsing="data-animate-history-browsing">
+                        <div id="nav"></div>
+                        <div id="main"></div>
+                        <div id="swup">
+                            <a href="/">Link</a>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `);
+        expect(getByTestId(container, 'body')).not.toHaveClass('connected');
+
+        startStimulus();
+        await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+        await waitFor(() => expect(swup.options.containers).toStrictEqual(["#main"]));
+    });
+
+    it('only data-containers provided', async () => {
+        let container = mountDOM(`
+            <html>
+                <head>
+                    <title>Symfony UX</title>
+                </head>
+                <body>
+                    <div 
+                        data-testid="body"
+                        data-controller="check swup"
+                        data-containers="#swup #nav"
+                        data-link-selector="a"
+                        data-animation-selector="[transition-*]"
+                        data-debug="data-debug"
+                        data-cache="data-cache"
+                        data-animate-history-browsing="data-animate-history-browsing">
+                        <div id="nav"></div>
+                        <div id="swup">
+                            <a href="/">Link</a>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `);
+        expect(getByTestId(container, 'body')).not.toHaveClass('connected');
+
+        startStimulus();
+        await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+        await waitFor(() => expect(swup.options.containers).toStrictEqual(["#swup", "#nav"]));
+    });
+
+    it('data-main-element and data-containers are provided,', async () => {
+        let container = mountDOM(`
+            <html>
+                <head>
+                    <title>Symfony UX</title>
+                </head>
+                <body>
+                    <div 
+                        data-testid="body"
+                        data-controller="check swup"
+                        data-main-element="#main"
+                        data-containers="#swup #nav"
+                        data-link-selector="a"
+                        data-animation-selector="[transition-*]"
+                        data-debug="data-debug"
+                        data-cache="data-cache"
+                        data-animate-history-browsing="data-animate-history-browsing">
+                        <div id="nav"></div>
+                        <div id="main"></div>
+                        <div id="swup">
+                            <a href="/">Link</a>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `);
+        expect(getByTestId(container, 'body')).not.toHaveClass('connected');
+
+        startStimulus();
+        await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+        await waitFor(() => expect(swup.options.containers).toStrictEqual(["#main", "#swup", "#nav"]));
     });
 });
