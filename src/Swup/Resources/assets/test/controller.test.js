@@ -17,8 +17,9 @@ import SwupController from '../dist/controller';
 // Controller used to check the actual controller was properly booted
 class CheckController extends Controller {
     connect() {
-        this.element.addEventListener('swup:connect', () => {
+        this.element.addEventListener('swup:connect', (event) => {
             this.element.classList.add('connected');
+            this.element.swup = event.detail;
         });
     }
 }
@@ -90,7 +91,11 @@ describe('SwupController', () => {
         expect(getByTestId(container, 'body')).not.toHaveClass('connected');
 
         startStimulus();
-        await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+        await waitFor(() => {
+            expect(getByTestId(container, 'body')).toHaveClass('connected');
+        });
+
+        const swup = getByTestId(container, 'body').swup;
         await waitFor(() => expect(swup.options.containers).toStrictEqual(["#swup"]));
     });
 
@@ -122,7 +127,11 @@ describe('SwupController', () => {
         expect(getByTestId(container, 'body')).not.toHaveClass('connected');
 
         startStimulus();
-        await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+        await waitFor(() => {
+            expect(getByTestId(container, 'body')).toHaveClass('connected');
+        });
+
+        const swup = getByTestId(container, 'body').swup;
         await waitFor(() => expect(swup.options.containers).toStrictEqual(["#main"]));
     });
 
@@ -153,7 +162,11 @@ describe('SwupController', () => {
         expect(getByTestId(container, 'body')).not.toHaveClass('connected');
 
         startStimulus();
-        await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+        await waitFor(() => {
+            expect(getByTestId(container, 'body')).toHaveClass('connected');
+        });
+
+        const swup = getByTestId(container, 'body').swup;
         await waitFor(() => expect(swup.options.containers).toStrictEqual(["#swup", "#nav"]));
     });
 
@@ -186,7 +199,11 @@ describe('SwupController', () => {
         expect(getByTestId(container, 'body')).not.toHaveClass('connected');
 
         startStimulus();
-        await waitFor(() => expect(getByTestId(container, 'body')).toHaveClass('connected'));
+        await waitFor(() => {
+            expect(getByTestId(container, 'body')).toHaveClass('connected');
+        });
+
+        const swup = getByTestId(container, 'body').swup;
         await waitFor(() => expect(swup.options.containers).toStrictEqual(["#main", "#swup", "#nav"]));
     });
 });
