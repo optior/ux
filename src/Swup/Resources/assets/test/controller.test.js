@@ -96,7 +96,7 @@ describe('SwupController', () => {
         });
 
         const swup = getByTestId(container, 'body').swup;
-        await waitFor(() => expect(swup.options.containers).toStrictEqual(["#swup"]));
+        await waitFor(() => expect(swup.options.containers).toStrictEqual(['#swup']));
     });
 
     it('only data-main-element is provided,', async () => {
@@ -132,7 +132,7 @@ describe('SwupController', () => {
         });
 
         const swup = getByTestId(container, 'body').swup;
-        await waitFor(() => expect(swup.options.containers).toStrictEqual(["#main"]));
+        await waitFor(() => expect(swup.options.containers).toStrictEqual(['#main']));
     });
 
     it('only data-containers provided', async () => {
@@ -167,7 +167,7 @@ describe('SwupController', () => {
         });
 
         const swup = getByTestId(container, 'body').swup;
-        await waitFor(() => expect(swup.options.containers).toStrictEqual(["#swup", "#nav"]));
+        await waitFor(() => expect(swup.options.containers).toStrictEqual(['#swup', '#nav']));
     });
 
     it('data-main-element and data-containers are provided,', async () => {
@@ -204,6 +204,6 @@ describe('SwupController', () => {
         });
 
         const swup = getByTestId(container, 'body').swup;
-        await waitFor(() => expect(swup.options.containers).toStrictEqual(["#main", "#swup", "#nav"]));
+        await waitFor(() => expect(swup.options.containers).toStrictEqual(['#main', '#swup', '#nav']));
     });
 });
